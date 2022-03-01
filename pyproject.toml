@@ -1,0 +1,9 @@
+[tool.black]
+line-length = 120
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning:future.*:",
+    "ignore::DeprecationWarning:apache_beam.*:",
+    "ignore:cannot collect test class 'TestPipeline' because it has a __init__ constructor",
+]
