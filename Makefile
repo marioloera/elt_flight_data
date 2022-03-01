@@ -15,3 +15,6 @@ test:
 coverage: test
 	coverage report -m
 	coverage html
+
+fetch-input-data:
+	./scripts/fetch_input_data.sh
