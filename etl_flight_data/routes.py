@@ -51,6 +51,9 @@ class Routes:
         # check if is domestic or international flight
         source_country, is_domestic = processed_route
 
+        if source_country is None:
+            return
+
         # add country to countries dictionary
         if source_country not in self.flights_per_country:
             self.flights_per_country[source_country] = {
