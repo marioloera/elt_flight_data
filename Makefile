@@ -10,11 +10,13 @@ lint:
 	pre-commit run --all-files
 
 test:
-	coverage run -m pytest
+	python3 -m pytest -v
 
-coverage: test
+coverage:
+	coverage run -m pytest
 	coverage report -m
 	coverage html
+	open htmlcov/index.html
 
 fetch-input-data:
 	./scripts/fetch_input_data.sh
