@@ -3,38 +3,8 @@ from etl_flight_data.transforms import Airports
 
 class TestAirports:
     input_data = [
-        (
-            3484,
-            "Los Angeles International Airport",
-            "Los Angeles",
-            "United States",
-            "LAX",
-            "KLAX",
-            33.94250107,
-            -118.4079971,
-            125,
-            -8,
-            "A",
-            "America/Los_Angeles",
-            "airport",
-            "OurAirports",
-        ),
-        (
-            737,
-            "Stockholm-Arlanda Airport",
-            "Stockholm",
-            "Sweden",
-            "ARN",
-            "ESSA",
-            59.651901245117,
-            17.918600082397,
-            137,
-            1,
-            "E",
-            "Europe/Stockholm",
-            "airport",
-            "OurAirports",
-        ),
+        (3484, "Los Angeles International Airport", "Los Angeles", "United States", "LAX"),
+        (737, "Stockholm-Arlanda Airport", "Stockholm", "Sweden", "ARN"),
     ]
 
     def test_process_row(self):
@@ -45,12 +15,23 @@ class TestAirports:
         assert Airports._process_row(("c1", "c2")) is None
         assert Airports._process_row(None) is None
         assert Airports._process_row("abc,iji,idk") is None
-        assert Airports._process_row(list(self.input_data[1])) is None
+        assert Airports._process_row({1: "ab"}) is None
 
     def test_process_rows(self):
         expected = {
             "ARN": "Sweden",
             "LAX": "United States",
         }
-        actual_data = Airports().process_rows(self.input_data)
+        actual_data = Airports.process_rows(self.input_data)
+        assert expected == actual_data
+
+    def test_procss_file(self):
+        file_path = "test_data/airports.dat"
+        expected = {
+            "GKA": "Papua New Guinea",
+            "LAE": "Papua New Guinea",
+            "OBL": "Belgium",
+            "AOC": "Germany",
+        }
+        actual_data = Airports.process_file(file_path)
         assert expected == actual_data

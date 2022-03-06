@@ -1,3 +1,4 @@
+import csv
 import logging
 
 
@@ -31,22 +32,19 @@ class Airports:
         source=13,
     )
 
-    def __init__(self):
-        self.data = {}
-
     @staticmethod
     def _process_row(element):
         """
         Returns aiport iata code and country
 
         Parameters:
-            element (tuple): with the columns dict
+            element (list): with the columns dict
 
         Returns:
             iata (str):
             country (str):
         """
-        if not isinstance(element, tuple):
+        if not (isinstance(element, list) or isinstance(element, tuple)):
             logging.warning(f"wrong input type: {type(element)}")
             return None
         try:
@@ -59,17 +57,38 @@ class Airports:
             logging.warning(msg)
             return None
 
-    def process_rows(self, rows):
+    @staticmethod
+    def process_rows(rows):
         """
-        Returns a dictionar aiport iata code and country
+        Returns a dictionary aiport iata code and country
 
         Parameters:
-            list of tuples with aiprot information
+            list of lists with aiprot information
 
         Returns: dictionary
             {iata: country}
         """
+        results = {}
         for row in rows:
             iata, country = Airports()._process_row(row)
-            self.data[iata] = country
-        return self.data
+            results[iata] = country
+        return results
+
+    @staticmethod
+    def process_file(file_path):
+        """
+        Returns a dictionary aiport iata code and country
+
+        Parameters:
+            file_path: list of lists with aiprot information
+
+        Returns: dictionary
+            {iata: country}
+        """
+        results = {}
+        with open(file_path, "r", encoding="UTF-8") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                iata, country = Airports._process_row(row)
+                results[iata] = country
+        return results
