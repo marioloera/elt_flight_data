@@ -85,6 +85,7 @@ class Routes:
         return results
 
     def save_results(self, file_path):
+        "directory must exist"
         with open(file_path, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerows(self.get_formated_results())

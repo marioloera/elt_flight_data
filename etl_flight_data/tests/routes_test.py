@@ -1,3 +1,5 @@
+import csv
+
 from etl_flight_data.routes import Routes
 
 
@@ -97,3 +99,12 @@ class TestRoutes:
             ("United States", 1, 2),
         ]
         assert expected_output == routes.get_formated_results()
+
+        temp_out_file = "/tmp/elt_flight_data_test_output.csv"
+        routes.save_results(temp_out_file)
+
+        with open(temp_out_file, "r", encoding="UTF-8") as f:
+            reader = csv.reader(f)
+            expected_output = [r for r in reader]
+
+        assert expected_output == expected_output
