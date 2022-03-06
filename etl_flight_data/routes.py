@@ -60,3 +60,7 @@ class Routes:
         # add flights to countries
         self.flights_per_country[source_country]["domestic_count"] += int(is_domestic)
         self.flights_per_country[source_country]["international_count"] += int(not is_domestic)
+
+    def process_routes(self, routes):
+        for route in routes:
+            self.acc_route(self.process_route(route))

@@ -43,3 +43,28 @@ class TestRoutes:
             routes.acc_route(processed_route)
 
         assert expected_output == routes.flights_per_country
+
+    def test_process_routes(self):
+
+        routes_data = [
+            (00, 000, "ARN", 737, "GOT"),
+            (00, 000, "ARN", 737, "GOT"),
+            (00, 000, "ARN", 737, "LAX"),
+            (00, 000, "LAX", 737, "GOT"),
+            (00, 000, "LAX", 737, "ARN"),
+            (00, 000, "LAX", 737, "ELP"),
+        ]
+        expected_output = {
+            "Sweden": {
+                "domestic_count": 2,
+                "international_count": 1,
+            },
+            "United States": {
+                "domestic_count": 1,
+                "international_count": 2,
+            },
+        }
+
+        routes = Routes(self.AIRPORTS)
+        routes.process_routes(routes_data)
+        assert expected_output == routes.flights_per_country
