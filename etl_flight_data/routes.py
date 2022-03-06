@@ -77,11 +77,10 @@ class Routes:
                 self.acc_route(self.process_route(route))
 
     def get_formated_results(self):
-        results = []
-        # TODO: SORT
-        for key, value in self.flights_per_country.items():
-            line = key, value["domestic_count"], value["international_count"]
-            results.append(line)
+        results = [
+            (c, self.flights_per_country[c]["domestic_count"], self.flights_per_country[c]["international_count"])
+            for c in sorted(self.flights_per_country.keys())
+        ]
         return results
 
     def save_results(self, file_path):
