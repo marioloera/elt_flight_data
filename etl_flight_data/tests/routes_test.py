@@ -16,8 +16,14 @@ class TestRoutes:
 
     def test_process_route_unkwnon_country(self):
         routes = Routes(self.AIRPORTS)
-        assert (None, None) == routes.process_route((00, 410, "XXX", -1, "YYY"))
-        assert (None, None) == routes.process_route((00, 410, "GOT", -1, "YYY"))
+        assert (None) == routes.process_route((00, 410, "XXX", -1, "YYY"))
+        assert (None) == routes.process_route((00, 410, "GOT", -1, "YYY"))
+
+    def test_process_route_invalid_input(self):
+        routes = Routes(self.AIRPORTS)
+        assert (None) == routes.process_route('00, 000, "ARN", 737, "GOT"')
+        assert (None) == routes.process_route((00, 000))
+        assert (None) == routes.process_route(None)
 
     def test_acc_route(self):
 
@@ -26,6 +32,7 @@ class TestRoutes:
             ("Sweden", True),
             ("Sweden", False),
             ("United States", True),
+            None,
         ]
         expected_output = {
             "Sweden": {

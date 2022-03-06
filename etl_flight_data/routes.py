@@ -29,6 +29,9 @@ class Routes:
         unknown country record
         """
         # get row info
+        if not (isinstance(row, list) or isinstance(row, tuple)):
+            logging.warning(f"wrong input type: {type(row)}")
+            return None
         try:
             source_airport = row[self.columns["source_airport"]]
             destination_airport = row[self.columns["destination_airport"]]
@@ -37,23 +40,21 @@ class Routes:
             source_country = self.airports.get(source_airport, None)
             destination_country = self.airports.get(destination_airport, None)
             if source_country is None or destination_country is None:
-                return None, None
+                return None
 
             is_domestic = source_country == destination_country
             return source_country, is_domestic
 
         except Exception as ex:
-            # TODO: TEST
             msg = f"{ex}. row: {row}"
             logging.warning(msg)
-            pass
+            return None
 
     def acc_route(self, processed_route):
+        if processed_route is None:
+            return
         # check if is domestic or international flight
         source_country, is_domestic = processed_route
-
-        if source_country is None:
-            return
 
         # add country to countries dictionary
         if source_country not in self.flights_per_country:
