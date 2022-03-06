@@ -43,6 +43,7 @@ class Routes:
             return source_country, is_domestic
 
         except Exception as ex:
+            # TODO: TEST
             msg = f"{ex}. row: {row}"
             logging.warning(msg)
             pass
@@ -77,7 +78,13 @@ class Routes:
 
     def get_formated_results(self):
         results = []
+        # TODO: SORT
         for key, value in self.flights_per_country.items():
             line = key, value["domestic_count"], value["international_count"]
             results.append(line)
         return results
+
+    def save_results(self, file_path):
+        with open(file_path, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerows(self.get_formated_results())
