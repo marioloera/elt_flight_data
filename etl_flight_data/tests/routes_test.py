@@ -72,3 +72,21 @@ class TestRoutes:
         routes_file = Routes(self.AIRPORTS)
         routes_file.process_routes_from_file("test_data/routes.dat")
         assert expected_output == routes_file.flights_per_country
+
+    def test_get_formated_results(self):
+        routes = Routes({})
+        routes.flights_per_country = {
+            "Sweden": {
+                "domestic_count": 2,
+                "international_count": 1,
+            },
+            "United States": {
+                "domestic_count": 1,
+                "international_count": 2,
+            },
+        }
+        expected_output = [
+            ("Sweden", 2, 1),
+            ("United States", 1, 2),
+        ]
+        assert expected_output == routes.get_formated_results()

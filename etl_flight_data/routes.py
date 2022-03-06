@@ -74,3 +74,10 @@ class Routes:
             routes = csv.reader(f)
             for route in routes:
                 self.acc_route(self.process_route(route))
+
+    def get_formated_results(self):
+        results = []
+        for key, value in self.flights_per_country.items():
+            line = key, value["domestic_count"], value["international_count"]
+            results.append(line)
+        return results
