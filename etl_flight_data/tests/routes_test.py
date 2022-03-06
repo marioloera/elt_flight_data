@@ -68,3 +68,7 @@ class TestRoutes:
         routes = Routes(self.AIRPORTS)
         routes.process_routes(routes_data)
         assert expected_output == routes.flights_per_country
+
+        routes_file = Routes(self.AIRPORTS)
+        routes_file.process_routes_from_file("test_data/routes.dat")
+        assert expected_output == routes_file.flights_per_country

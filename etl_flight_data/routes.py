@@ -1,3 +1,4 @@
+import csv
 import logging
 
 
@@ -64,3 +65,9 @@ class Routes:
     def process_routes(self, routes):
         for route in routes:
             self.acc_route(self.process_route(route))
+
+    def process_routes_from_file(self, file_path):
+        with open(file_path, "r", encoding="UTF-8") as f:
+            routes = csv.reader(f)
+            for route in routes:
+                self.acc_route(self.process_route(route))
