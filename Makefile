@@ -43,6 +43,9 @@ install-airflow: clean
 	sed -i=.bak 's/load_examples = True/load_examples = False/g' $(AIRFLOW_HOME)/airflow.cfg
 	sed -i=.bak "s/# AUTH_ROLE_PUBLIC = 'Public'/AUTH_ROLE_PUBLIC = 'Admin'/g" $(AIRFLOW_HOME)/webserver_config.py
 
+	# link input data, for sensors checks
+	ln -sfF  $(PWD)/input_data/ /tmp/
+
 lint:
 	pre-commit run --all-files
 
