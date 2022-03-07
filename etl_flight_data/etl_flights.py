@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
 import argparse
+import csv
 import logging
 
 from airports import Airports
@@ -21,11 +21,12 @@ def main():
     airports = Airports.process_file("input_data/airports.dat")
 
     # extract transform: routes
-    routes = Routes(airports)
-    routes.process_routes_from_file("input_data/routes.dat")
+    flights_per_country = Routes.get_flights_per_country(airports, "input_data/routes.dat")
 
     # load: results in files
-    routes.save_results(args.output_file)
+    with open(args.output_file, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(flights_per_country)
 
     logging.info("Process completed!")
 

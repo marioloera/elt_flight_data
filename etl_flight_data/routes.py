@@ -71,12 +71,6 @@ class Routes:
         for route in routes:
             self.acc_route(self.process_route(route))
 
-    def process_routes_from_file(self, file_path):
-        with open(file_path, "r", encoding="UTF-8") as f:
-            routes = csv.reader(f)
-            for route in routes:
-                self.acc_route(self.process_route(route))
-
     def get_formated_results(self):
         results = [
             (c, self.flights_per_country[c]["domestic_count"], self.flights_per_country[c]["international_count"])
@@ -84,8 +78,12 @@ class Routes:
         ]
         return results
 
-    def save_results(self, file_path):
-        "directory must exist"
-        with open(file_path, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerows(self.get_formated_results())
+    @staticmethod
+    def get_flights_per_country(aiports, file_path):
+        routes = Routes(aiports)
+        with open(file_path, "r", encoding="UTF-8") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                routes.acc_route(routes.process_route(row))
+
+        return routes.get_formated_results()

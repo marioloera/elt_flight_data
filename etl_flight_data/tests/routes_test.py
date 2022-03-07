@@ -1,5 +1,3 @@
-import csv
-
 from etl_flight_data.routes import Routes
 
 
@@ -78,10 +76,6 @@ class TestRoutes:
         routes.process_routes(routes_data)
         assert expected_output == routes.flights_per_country
 
-        routes_file = Routes(self.AIRPORTS)
-        routes_file.process_routes_from_file("test_data/routes.dat")
-        assert expected_output == routes_file.flights_per_country
-
     def test_get_formated_results(self):
         routes = Routes({})
         routes.flights_per_country = {
@@ -100,11 +94,10 @@ class TestRoutes:
         ]
         assert expected_output == routes.get_formated_results()
 
-        temp_out_file = "/tmp/elt_flight_data_test_output.csv"
-        routes.save_results(temp_out_file)
-
-        with open(temp_out_file, "r", encoding="UTF-8") as f:
-            reader = csv.reader(f)
-            expected_output = [r for r in reader]
-
-        assert expected_output == expected_output
+    def test_get_flights_per_country(self):
+        flights_per_country_file = Routes.get_flights_per_country(self.AIRPORTS, "test_data/routes.dat")
+        expected_output = [
+            ("Sweden", 2, 1),
+            ("United States", 1, 2),
+        ]
+        assert expected_output == flights_per_country_file
