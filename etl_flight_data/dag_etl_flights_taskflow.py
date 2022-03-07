@@ -4,11 +4,11 @@
     using TaskFlow API paradigm
     https://airflow.apache.org/docs/apache-airflow/stable/tutorial_taskflow_api.html
 """
-import csv
 from datetime import datetime
 
 from airflow.decorators import dag, task
 from airports import Airports
+from etl_flights import save_results
 from routes import Routes
 
 
@@ -28,17 +28,19 @@ def etl_flights_taskflow():
         return Routes.get_flights_per_country(airports, routes_file)
 
     @task()
-    def write_to_csv(flights_per_country, output_file):
-        with open(output_file, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerows(flights_per_country)
+    def save_results_task(flights_per_country, output_file):
+        save_results(flights_per_country, output_file)
 
     # alternative 1: create only one etl task that do all the logic
     # alternative 2: create only one task that call etl_flights.run_etl
 
-    airports = get_airports("input_data/airports.dat")
-    flights_per_country = get_flights_per_country(airports, "input_data/routes.dat")
-    write_to_csv(flights_per_country, "output_data/output.csv")
+    airports_file = "input_data/airports.dat"
+    routes_file = "input_data/routes.dat"
+    output_file = "output_data/output.csv"
+
+    airports = get_airports(airports_file)
+    flights_per_country = get_flights_per_country(airports, routes_file)
+    save_results_task(flights_per_country, output_file)
 
 
 _ = etl_flights_taskflow()
