@@ -44,8 +44,8 @@ def etl_flights_taskflow():
     # we can re-map the input, move data
 
     # sensor tasks
-    check_airports_task = FileSensor(task_id="check_airports", filepath=airports_file, timeout=0)
-    check_routes_task = FileSensor(task_id="check_routes", filepath=routes_file, timeout=0)
+    check_airports_task = FileSensor(task_id="check_airports", filepath=f"tmp/{airports_file}", timeout=0)
+    check_routes_task = FileSensor(task_id="check_routes", filepath=f"tmp/{routes_file}", timeout=0)
 
     # main logic
     airports = get_airports(airports_file)
