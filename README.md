@@ -12,7 +12,7 @@ United Kingdom,12371,2899
 ```
 The output should be written to a file, the name of which is passed as an argument from the command line, example:
 ```
-$ python flights.py output.txt
+python etl_flight_data/etl_flights.py --output_file output.txt
 ```
 Please send us your code, either as zip-file attached to an email or if you fork this repo, a link to the fork. (Do not push to this repo, thanks!) We will get back to you with some feedback, either written or as a follow-up interview where we ask some questions and give you the opportunity to explain your design choices. We do not expect you to spend more than a few hours on the assignment. If there are unclarities, you can of course reach out to us and ask questions but even better would be that you made some reasonable assumptions and presented those assumptions together with the code.
 

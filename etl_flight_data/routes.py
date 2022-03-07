@@ -29,6 +29,9 @@ class Routes:
         unknown country record
         """
         # get row info
+        if not (isinstance(row, list) or isinstance(row, tuple)):
+            logging.warning(f"wrong input type: {type(row)}")
+            return None
         try:
             source_airport = row[self.columns["source_airport"]]
             destination_airport = row[self.columns["destination_airport"]]
@@ -37,7 +40,7 @@ class Routes:
             source_country = self.airports.get(source_airport, None)
             destination_country = self.airports.get(destination_airport, None)
             if source_country is None or destination_country is None:
-                return None, None
+                return None
 
             is_domestic = source_country == destination_country
             return source_country, is_domestic
@@ -45,9 +48,11 @@ class Routes:
         except Exception as ex:
             msg = f"{ex}. row: {row}"
             logging.warning(msg)
-            pass
+            return None
 
     def acc_route(self, processed_route):
+        if processed_route is None:
+            return
         # check if is domestic or international flight
         source_country, is_domestic = processed_route
 
@@ -71,3 +76,16 @@ class Routes:
             routes = csv.reader(f)
             for route in routes:
                 self.acc_route(self.process_route(route))
+
+    def get_formated_results(self):
+        results = [
+            (c, self.flights_per_country[c]["domestic_count"], self.flights_per_country[c]["international_count"])
+            for c in sorted(self.flights_per_country.keys())
+        ]
+        return results
+
+    def save_results(self, file_path):
+        "directory must exist"
+        with open(file_path, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerows(self.get_formated_results())

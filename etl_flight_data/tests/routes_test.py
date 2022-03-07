@@ -1,3 +1,5 @@
+import csv
+
 from etl_flight_data.routes import Routes
 
 
@@ -16,8 +18,14 @@ class TestRoutes:
 
     def test_process_route_unkwnon_country(self):
         routes = Routes(self.AIRPORTS)
-        assert (None, None) == routes.process_route((00, 410, "XXX", -1, "YYY"))
-        assert (None, None) == routes.process_route((00, 410, "GOT", -1, "YYY"))
+        assert (None) == routes.process_route((00, 410, "XXX", -1, "YYY"))
+        assert (None) == routes.process_route((00, 410, "GOT", -1, "YYY"))
+
+    def test_process_route_invalid_input(self):
+        routes = Routes(self.AIRPORTS)
+        assert (None) == routes.process_route('00, 000, "ARN", 737, "GOT"')
+        assert (None) == routes.process_route((00, 000))
+        assert (None) == routes.process_route(None)
 
     def test_acc_route(self):
 
@@ -26,6 +34,7 @@ class TestRoutes:
             ("Sweden", True),
             ("Sweden", False),
             ("United States", True),
+            None,
         ]
         expected_output = {
             "Sweden": {
@@ -72,3 +81,30 @@ class TestRoutes:
         routes_file = Routes(self.AIRPORTS)
         routes_file.process_routes_from_file("test_data/routes.dat")
         assert expected_output == routes_file.flights_per_country
+
+    def test_get_formated_results(self):
+        routes = Routes({})
+        routes.flights_per_country = {
+            "Sweden": {
+                "domestic_count": 2,
+                "international_count": 1,
+            },
+            "United States": {
+                "domestic_count": 1,
+                "international_count": 2,
+            },
+        }
+        expected_output = [
+            ("Sweden", 2, 1),
+            ("United States", 1, 2),
+        ]
+        assert expected_output == routes.get_formated_results()
+
+        temp_out_file = "/tmp/elt_flight_data_test_output.csv"
+        routes.save_results(temp_out_file)
+
+        with open(temp_out_file, "r", encoding="UTF-8") as f:
+            reader = csv.reader(f)
+            expected_output = [r for r in reader]
+
+        assert expected_output == expected_output
