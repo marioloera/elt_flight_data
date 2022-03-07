@@ -80,6 +80,7 @@ class Routes:
 
     @staticmethod
     def get_flights_per_country(aiports, file_path):
+        logging.info(f"getting routes from {file_path} file")
         routes = Routes(aiports)
         with open(file_path, "r", encoding="UTF-8") as f:
             reader = csv.reader(f)

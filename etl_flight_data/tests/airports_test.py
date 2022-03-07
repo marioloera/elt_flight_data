@@ -25,7 +25,7 @@ class TestAirports:
         actual_data = Airports.process_rows(self.input_data)
         assert expected == actual_data
 
-    def test_procss_file(self):
+    def test_get_airports(self):
         file_path = "test_data/airports.dat"
         expected = {
             "GKA": "Papua New Guinea",
@@ -33,5 +33,5 @@ class TestAirports:
             "OBL": "Belgium",
             "AOC": "Germany",
         }
-        actual_data = Airports.process_file(file_path)
+        actual_data = Airports.get_airports(file_path)
         assert expected == actual_data

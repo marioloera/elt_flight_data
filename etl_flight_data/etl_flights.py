@@ -6,6 +6,32 @@ from airports import Airports
 from routes import Routes
 
 
+def run_etl(
+    output_file="output_data/output.csv",
+    airpots_file="input_data/airports.dat",
+    routes_file="input_data/routes.dat",
+):
+    logging.info("etl sarted!")
+
+    # extract transform: airports
+    airports = Airports.get_airports(airpots_file)
+
+    # extract transform: routes
+    flights_per_country = Routes.get_flights_per_country(airports, routes_file)
+
+    # load: results in files
+    save_results(flights_per_country, output_file)
+
+    logging.info("etl completed!")
+
+
+def save_results(results, output_file):
+    logging.info(f"writing results to {output_file}")
+    with open(output_file, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(results)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -14,21 +40,10 @@ def main():
         default="output_data/output.csv",
     )
     args = parser.parse_args()
-    logging.info("Process sarted!")
+
     logging.info(args)
 
-    # extract transform: airports
-    airports = Airports.process_file("input_data/airports.dat")
-
-    # extract transform: routes
-    flights_per_country = Routes.get_flights_per_country(airports, "input_data/routes.dat")
-
-    # load: results in files
-    with open(args.output_file, "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerows(flights_per_country)
-
-    logging.info("Process completed!")
+    run_etl(args.output_file)
 
 
 if __name__ == "__main__":

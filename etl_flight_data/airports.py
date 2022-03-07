@@ -75,7 +75,7 @@ class Airports:
         return results
 
     @staticmethod
-    def process_file(file_path):
+    def get_airports(file_path):
         """
         Returns a dictionary aiport iata code and country
 
@@ -85,6 +85,7 @@ class Airports:
         Returns: dictionary
             {iata: country}
         """
+        logging.info(f"getting airports from {file_path} file")
         results = {}
         with open(file_path, "r", encoding="UTF-8") as f:
             reader = csv.reader(f)
