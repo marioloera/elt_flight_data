@@ -2,4 +2,5 @@
 [run]
 omit =
     */site-packages/*
+    */__init__.py
     # */distutils/*
