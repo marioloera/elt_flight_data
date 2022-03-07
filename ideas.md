@@ -8,8 +8,6 @@
 
 1. ci/cd
 
-1. airflow dag
-
 1. bigquery, with terraform, dbt
 
 1. system requirements python version
