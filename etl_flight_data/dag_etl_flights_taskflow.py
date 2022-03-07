@@ -7,6 +7,7 @@
 from datetime import datetime
 
 from airflow.decorators import dag, task
+from airflow.sensors.filesystem import FileSensor
 from airports import Airports
 from etl_flights import save_results
 from routes import Routes
@@ -38,9 +39,22 @@ def etl_flights_taskflow():
     routes_file = "input_data/routes.dat"
     output_file = "output_data/output.csv"
 
+    # currently airlow will take / + file as a path
+    # dirname = os.path.dirname(__file__) # this will change if executed by airflow
+    # we can re-map the input, move data
+
+    # sensor tasks
+    check_airports_task = FileSensor(task_id="check_airports", filepath=f"tmp/{airports_file}", timeout=0)
+    check_routes_task = FileSensor(task_id="check_routes", filepath=f"tmp/{routes_file}", timeout=0)
+
+    # main logic
     airports = get_airports(airports_file)
     flights_per_country = get_flights_per_country(airports, routes_file)
     save_results_task(flights_per_country, output_file)
+
+    # sensor dependencies
+    check_airports_task >> airports
+    check_routes_task >> flights_per_country
 
 
 _ = etl_flights_taskflow()

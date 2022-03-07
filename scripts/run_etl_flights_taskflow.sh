@@ -10,3 +10,5 @@ airflow tasks test etl_flights_taskflow get_airports 20220301
 airflow tasks test etl_flights_taskflow get_flights_per_country 20220301
 
 airflow tasks test etl_flights_taskflow save_results_task 20220301
+
+airflow tasks test etl_flights_taskflow check_airports 20220301
