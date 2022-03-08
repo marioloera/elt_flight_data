@@ -2,8 +2,8 @@ import argparse
 import csv
 import logging
 
-from airports import Airports
-from routes import Routes
+from modules.airports import Airports
+from modules.routes import Routes
 
 
 def run_etl(
