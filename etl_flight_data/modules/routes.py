@@ -1,11 +1,13 @@
 import csv
 import logging
 
+from modules.countries import Countries
+
 
 class Routes:
     def __init__(self, airports):
         self.airports = airports
-        self.flights_per_country = {}
+        self.countries = Countries()
 
     columns = dict(
         airline=0,
@@ -31,16 +33,16 @@ class Routes:
         # get row info
         if not (isinstance(row, list) or isinstance(row, tuple)):
             logging.warning(f"wrong input type: {type(row)}")
-            return None
+            return
         try:
             source_airport = row[self.columns["source_airport"]]
             destination_airport = row[self.columns["destination_airport"]]
 
             # get countries
-            source_country = self.airports.get(source_airport, None)
-            destination_country = self.airports.get(destination_airport, None)
+            source_country = self.airports.get(source_airport)
+            destination_country = self.airports.get(destination_airport)
             if source_country is None or destination_country is None:
-                return None
+                return
 
             is_domestic = source_country == destination_country
             return source_country, is_domestic
@@ -48,35 +50,7 @@ class Routes:
         except Exception as ex:
             msg = f"{ex}. row: {row}"
             logging.warning(msg)
-            return None
-
-    def acc_route(self, processed_route):
-        if processed_route is None:
             return
-        # check if is domestic or international flight
-        source_country, is_domestic = processed_route
-
-        # add country to countries dictionary
-        if source_country not in self.flights_per_country:
-            self.flights_per_country[source_country] = {
-                "domestic_count": 0,
-                "international_count": 0,
-            }
-
-        # add flights to countries
-        self.flights_per_country[source_country]["domestic_count"] += int(is_domestic)
-        self.flights_per_country[source_country]["international_count"] += int(not is_domestic)
-
-    def process_routes(self, routes):
-        for route in routes:
-            self.acc_route(self.process_route(route))
-
-    def get_formated_results(self):
-        results = [
-            (c, self.flights_per_country[c]["domestic_count"], self.flights_per_country[c]["international_count"])
-            for c in sorted(self.flights_per_country.keys())
-        ]
-        return results
 
     @staticmethod
     def get_flights_per_country(aiports, file_path):
@@ -85,6 +59,9 @@ class Routes:
         with open(file_path, "r", encoding="UTF-8") as f:
             reader = csv.reader(f)
             for row in reader:
-                routes.acc_route(routes.process_route(row))
+                processed_route = routes.process_route(row)
+                if processed_route is None:
+                    continue
+                routes.countries.acc_country(*processed_route)
 
-        return routes.get_formated_results()
+        return routes.countries.get_formated_results()
