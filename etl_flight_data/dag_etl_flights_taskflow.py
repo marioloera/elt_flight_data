@@ -8,9 +8,10 @@ from datetime import datetime
 
 from airflow.decorators import dag, task
 from airflow.sensors.filesystem import FileSensor
-from etl_flights import save_results
-from modules.airports import Airports
-from modules.routes import Routes
+
+from etl_flight_data.etl_flights import save_results
+from etl_flight_data.modules.airports import Airports
+from etl_flight_data.modules.routes import Routes
 
 
 @dag(

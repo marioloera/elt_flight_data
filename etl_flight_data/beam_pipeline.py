@@ -2,7 +2,13 @@ import apache_beam as beam
 from apache_beam import Pipeline
 from apache_beam.io import ReadFromText, WriteToText
 from apache_beam.options.pipeline_options import PipelineOptions
-from modules.beam_transforms import Airports, FormatResults, ParseCsv, Routes
+
+from etl_flight_data.modules.beam_transforms import (
+    Airports,
+    FormatResults,
+    ParseCsv,
+    Routes,
+)
 
 
 def main(

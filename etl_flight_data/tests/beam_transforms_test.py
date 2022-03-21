@@ -1,7 +1,8 @@
 import apache_beam as beam
 from apache_beam.testing.test_pipeline import TestPipeline
 from apache_beam.testing.util import assert_that, equal_to
-from modules.beam_transforms import (
+
+from etl_flight_data.modules.beam_transforms import (
     Airports,
     FormatResults,
     ParseCsv,

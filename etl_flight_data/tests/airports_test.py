@@ -1,4 +1,4 @@
-from modules.airports import Airports
+from etl_flight_data.modules.airports import Airports
 
 
 class TestAirports:
