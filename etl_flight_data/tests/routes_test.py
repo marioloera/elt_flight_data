@@ -1,4 +1,4 @@
-from modules.routes import Routes
+from etl_flight_data.modules.routes import Routes
 
 
 class TestRoutes:

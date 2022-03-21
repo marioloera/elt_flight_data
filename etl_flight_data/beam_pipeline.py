@@ -1,16 +1,20 @@
+import argparse
+import logging
+
 import apache_beam as beam
 from apache_beam import Pipeline
 from apache_beam.io import ReadFromText, WriteToText
 from apache_beam.options.pipeline_options import PipelineOptions
-from modules.beam_transforms import Airports, FormatResults, ParseCsv, Routes
+
+from etl_flight_data.modules.beam_transforms import (
+    Airports,
+    FormatResults,
+    ParseCsv,
+    Routes,
+)
 
 
-def main(
-    output_file="output_data/output.csv",
-    airports_file="input_data/airports.dat",
-    routes_file="input_data/routes.dat",
-    pipeline_args=None,
-):
+def run(output_file, airports_file, routes_file, pipeline_args=None):
 
     pipeline_options = PipelineOptions(pipeline_args, save_main_session=True)
 
@@ -35,6 +39,27 @@ def main(
         shard_name_template="",
     )
     _ = p.run()
+
+
+def main():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--log_level", type=int, help="Python log level", default=30)
+    parser.add_argument("--output_file", default="output_data/output.csv")
+    parser.add_argument("--airports_file", default="input_data/airports.dat")
+    parser.add_argument("--routes_file", default="input_data/routes.dat")
+
+    known_args, pipeline_args = parser.parse_known_args()
+    logging.getLogger().setLevel(known_args.log_level)
+    logging.info(f"known_args:{known_args}")
+    logging.info(f"pipeline_args:{pipeline_args}")
+
+    run(
+        known_args.output_file,
+        known_args.airports_file,
+        known_args.routes_file,
+        pipeline_args,
+    )
 
 
 if __name__ == "__main__":

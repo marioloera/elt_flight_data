@@ -1,7 +1,7 @@
 import csv
 import logging
 
-from modules.countries import Countries
+from etl_flight_data.modules.countries import Countries
 
 
 class Routes:

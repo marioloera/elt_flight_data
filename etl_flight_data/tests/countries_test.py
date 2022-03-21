@@ -1,4 +1,4 @@
-from modules.countries import Countries, Country
+from etl_flight_data.modules.countries import Countries, Country
 
 
 class TestCountry:
