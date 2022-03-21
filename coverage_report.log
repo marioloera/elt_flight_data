@@ -1,12 +1,6 @@
 Name                                            Stmts   Miss  Cover   Missing
 -----------------------------------------------------------------------------
-etl_flight_data/modules/airports.py                34      0   100%
 etl_flight_data/modules/beam_transforms.py         91      0   100%
-etl_flight_data/modules/countries.py               20      0   100%
-etl_flight_data/modules/routes.py                  37      0   100%
-etl_flight_data/tests/airports_test.py             20      0   100%
 etl_flight_data/tests/beam_transforms_test.py      90      0   100%
-etl_flight_data/tests/countries_test.py            47      0   100%
-etl_flight_data/tests/routes_test.py               20      0   100%
 -----------------------------------------------------------------------------
-TOTAL                                             359      0   100%
+TOTAL                                             181      0   100%
