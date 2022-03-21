@@ -10,10 +10,10 @@ endif
 .PHONY: install install-dev test
 
 install:
-	pip install -r requirements.txt
+	pip install .
 
 install-dev: install
-	pip install -r requirements-dev.txt
+	pip install -e .[dev]
 	pre-commit install
 
 
