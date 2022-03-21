@@ -1,1 +1,2 @@
-pytest==6.2.5
+apache-beam==2.34.0
+pytest==6.2.2
